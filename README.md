@@ -54,3 +54,10 @@ Note: Please allow camera access on both desktop and mobile devices. A laptop wi
 4. Important: Ensure your smartphone and laptop are connected to the SAME Wi-Fi network.
 5. Scan the QR code. The system will automatically detect your local IP for the mobile link.
 
+
+
+## Reference
+1. Google MediaPipe. (2023). Face Landmarker Task-based Tracking. [Online] Available at: https://developers.google.com/mediapipe/solutions/vision/face_landmarker
+
+2. p5.js. (2026). A JavaScript library for creative coding. [Online] Available at: https://p5js.org/
+
