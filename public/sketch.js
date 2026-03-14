@@ -465,35 +465,35 @@ function drawAlgorithmGazeOverlay() {
   drawEyeTrackingBox(leftEyeBox, "LEFT EYE");
   drawEyeTrackingBox(rightEyeBox, "RIGHT EYE");
 
-  // Main targeting crosshair
+
   stroke(0, 255, 255, 170);
   strokeWeight(1.8);
   line(eyeCenterX - 24, eyeCenterY, eyeCenterX + 24, eyeCenterY);
   line(eyeCenterX, eyeCenterY - 24, eyeCenterX, eyeCenterY + 24);
 
-  // Outer ring
+
   noFill();
   stroke(0, 255, 255, 110);
   strokeWeight(1.2);
   ellipse(eyeCenterX, eyeCenterY, 50);
 
-  // Inner point
+
   noStroke();
   fill(0, 255, 255, 180);
   ellipse(eyeCenterX, eyeCenterY, 5);
 
-  // Slow scanning line
+
   stroke(0, 255, 255, 70);
   strokeWeight(1.2);
   let scanY = map(sin(frameCount * 0.018), -1, 1, eyeCenterY - 34, eyeCenterY + 34);
   line(eyeCenterX - 100, scanY, eyeCenterX + 100, scanY);
 
-  // Subtle horizontal system guide
+
   stroke(0, 255, 255, 35);
   strokeWeight(1);
   line(0, eyeCenterY, width, eyeCenterY);
 
-  // System label block
+  
   noStroke();
   fill(0, 255, 255, 150);
   rect(eyeCenterX + 42, eyeCenterY - 48, 150, 40);
@@ -511,13 +511,13 @@ function drawAlgorithmGazeOverlay() {
 function drawEyeTrackingBox(box, label) {
   push();
 
-  // Main box
+
   stroke(0, 255, 255, 190);
   strokeWeight(2);
   noFill();
   rect(box.x, box.y, box.w, box.h);
 
-  // Corner accents
+
   let corner = 14;
 
   stroke(0, 255, 255, 230);
@@ -535,18 +535,19 @@ function drawEyeTrackingBox(box, label) {
   line(box.x + box.w, box.y + box.h, box.x + box.w - corner, box.y + box.h);
   line(box.x + box.w, box.y + box.h, box.x + box.w, box.y + box.h - corner);
 
-  // Label background
+
   noStroke();
   fill(0, 255, 255, 170);
   rect(box.x, box.y - 22, 96, 16);
 
-  // Label text
+
+  
   fill(0);
   textAlign(LEFT, TOP);
   textSize(10);
   text(label, box.x + 6, box.y - 20);
 
-  // Secondary label
+
   fill(0, 255, 255, 150);
   textSize(8);
   text("TARGET DETECTED", box.x, box.y + box.h + 6);
@@ -576,7 +577,7 @@ function drawSquintPrompt() {
   textSize(10);
   text("FOCUS ASSIST / CENTRAL RECOVERY", width * 0.5, height * 0.16 + 9);
 
-  // Secondary system line, no dramatic flashing
+
   fill(0, 255, 255, alpha * 0.85);
   textSize(11);
   text("SYSTEM RESPONSE ACTIVE", width * 0.5, height * 0.16 + 40);
