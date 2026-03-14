@@ -29,13 +29,12 @@ function getLocalIPv4() {
   return null;
 }
 
-app.get("/server-info", (req, res) => {
-  const localIP = getLocalIPv4();
-
+app.get('/server-info', (req, res) => {
+  const host = req.get('host'); 
+  const protocol = req.protocol;
+  
   res.json({
-    port: PORT,
-    localIP: localIP,
-    mobileURL: localIP ? `http://${localIP}:${PORT}/mobile.html` : null
+    mobileURL: `${protocol}://${host}/mobile.html`
   });
 });
 
