@@ -1,66 +1,73 @@
-const path = require("path");
-const os = require("os");
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
+const os = require('os');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  maxHttpBufferSize: 1e7, 
+  cors: {
+    origin: "*"
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
 
-function getLocalIPv4() {
-  const interfaces = os.networkInterfaces();
+app.use(express.static(path.join(__dirname, 'public')));
 
-  for (const name of Object.keys(interfaces)) {
-    for (const net of interfaces[name]) {
-      const isIPv4 = net.family === "IPv4" || net.family === 4;
-      const isInternal = net.internal === true;
-
-      if (isIPv4 && !isInternal) {
-        return net.address;
-      }
-    }
-  }
-
-  return null;
-}
 
 app.get('/server-info', (req, res) => {
-  const host = req.get('host'); 
-  const protocol = req.protocol;
-  
-  res.json({
-    mobileURL: `${protocol}://${host}/mobile.html`
-  });
-});
+  const host = req.get('host');
+  let mobileURL = "";
 
-io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
 
-  socket.on("cameraFrame", (payload) => {
-    socket.broadcast.emit("cameraFrame", payload);
-  });
-
-  socket.on("visionState", (payload) => {
-    socket.broadcast.emit("visionState", payload);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
-  });
-});
-
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-
-  const localIP = getLocalIPv4();
-  if (localIP) {
-    console.log(`Mobile viewer available at: http://${localIP}:${PORT}/mobile.html`);
+  if (host.includes('localhost') || host.includes('127.0.0.1')) {
+    const interfaces = os.networkInterfaces();
+    let localIP = 'localhost';
+    
+    for (let devName in interfaces) {
+      interfaces[devName].forEach((details) => {
+        if (details.family === 'IPv4' && !details.internal) {
+          localIP = details.address;
+        }
+      });
+    }
+   
+    mobileURL = `http://${localIP}:${PORT}/mobile.html`;
   } else {
-    console.log("No LAN IPv4 detected.");
+    const protocol = req.protocol === 'http' && !host.includes('onrender.com') ? 'http' : 'https';
+    mobileURL = `${protocol}://${host}/mobile.html`;
   }
+
+  res.json({
+    mobileURL: mobileURL
+  });
+});
+
+
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+
+  socket.on('cameraFrame', (data) => {
+    socket.broadcast.emit('cameraFrame', data);
+  });
+
+  
+  socket.on('visionState', (data) => {
+    socket.broadcast.emit('visionState', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`If running locally, check your QR code on the desktop page.`);
 });
