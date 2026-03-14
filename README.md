@@ -19,6 +19,7 @@ prostheses to restore, mediate, and complete our perception of the world.
 The interaction is based on the getEyeOpenRatio() function, which uses Eye Aspect Ratio (EAR) to measure how open the eyes are. Compared with simple pixel distance, this method is more stable because it is less affected by how far the user is from the camera.
 
 -Implementation(Core Code)
+
 //Define eyelid landmakrks(MediaPipe Indexing)
 Const LEFT_EYE_INDICES = [33, 133, 159, 145, 160, 144, 158, 153];
 Const RIGHT_EYE_INDICES = [362, 263, 386, 374, 385, 380, 387, 373];
@@ -41,6 +42,7 @@ function getEyeOpenRatio(landmarks, upperIndex, lowerIndex, leftCornerIndex, rig
 ## Live Demo
 
 https://workshop4-vision-error.onrender.com
+
 Note: Please allow camera access on both desktop and mobile devices. A laptop with a webcam is required for the best experience.
 
 
